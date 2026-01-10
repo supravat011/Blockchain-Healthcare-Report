@@ -1,0 +1,77 @@
+{
+  "_format": "hh-sol-cache-2",
+  "files": {
+    "D:\\Freelance\\Blockchain - healthcare report\\health-chain-secure-main\\backend\\contracts\\AccessControl.sol": {
+      "lastModificationDate": 1767516986823,
+      "contentHash": "af8d8f8f55aa34a31eaaa08d96b583d4",
+      "sourceName": "contracts/AccessControl.sol",
+      "solcConfig": {
+        "version": "0.8.20",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "AccessControl"
+      ]
+    },
+    "D:\\Freelance\\Blockchain - healthcare report\\health-chain-secure-main\\backend\\contracts\\MedicalRecords.sol": {
+      "lastModificationDate": 1767524271276,
+      "contentHash": "e0c36545fb8bbead34d726544c6ba445",
+      "sourceName": "contracts/MedicalRecords.sol",
+      "solcConfig": {
+        "version": "0.8.20",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "MedicalRecords"
+      ]
+    }
+  }
+}
