@@ -43,7 +43,7 @@ Click **"Advanced"** and add these environment variables:
 | `NODE_ENV` | `production` | Required |
 | `PORT` | `10000` | Render's default port |
 | `JWT_SECRET` | `<generate-random-string>` | **IMPORTANT**: Use a strong random string |
-| `DB_PATH` | `/var/data/database.sqlite` | Path to persistent disk |
+| `DB_PATH` | `./database.sqlite` | SQLite database path |
 | `FRONTEND_URL` | `<leave-empty-for-now>` | Will update after Vercel deployment |
 
 > [!IMPORTANT]
@@ -52,30 +52,46 @@ Click **"Advanced"** and add these environment variables:
 > node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
 > ```
 
-### Step 4: Add Persistent Disk (Important!)
-
-1. Scroll to **"Disks"** section
-2. Click **"Add Disk"**
-3. Configure:
-   - **Name**: `healthchain-data`
-   - **Mount Path**: `/var/data`
-   - **Size**: `1 GB` (free tier)
 
 > [!WARNING]
-> Without a persistent disk, your SQLite database will be reset on every deployment!
+> **Free Tier Limitation**: Render's free tier does NOT support persistent disks. Your SQLite database will be reset every time the service restarts or redeploys. This means all user data, medical records, and activity logs will be lost. This is acceptable for demos and testing, but not for production use.
 
-### Step 5: Deploy
+### Step 4: Understanding Free Tier Limitations
+
+**What happens on Render's free tier:**
+
+1. **Service spins down after 15 minutes of inactivity**
+   - First request after spin-down takes 30-60 seconds (cold start)
+   - You'll need to wait for the service to wake up
+
+2. **Database resets on every restart/redeploy**
+   - All user accounts will be deleted
+   - All medical records will be lost
+   - You'll need to re-register test accounts after each reset
+
+3. **When to expect resets:**
+   - Every time you push new code to GitHub
+   - When Render restarts the service
+   - During Render maintenance
+
+> [!TIP]
+> **Before a demo or presentation**: Visit your backend URL 15 minutes before to wake it up, then register your test accounts. This ensures everything is ready when you need it.
+
+### Step 4: Deploy
 
 1. Click **"Create Web Service"**
 2. Wait for the deployment to complete (5-10 minutes)
 3. Once deployed, copy your backend URL: `https://your-service-name.onrender.com`
 
-### Step 6: Test Backend
+### Step 7: Test Backend
 
 Visit your backend URL in a browser. You should see:
 ```json
 {"message": "MedChain Backend API is running"}
 ```
+
+> [!NOTE]
+> If the service was sleeping, this first request may take 30-60 seconds to respond. Be patient!
 
 ---
 
@@ -193,7 +209,7 @@ VITE_API_URL=https://your-backend-name.onrender.com
 NODE_ENV=production
 PORT=10000
 JWT_SECRET=<your-secure-random-string>
-DB_PATH=/var/data/database.sqlite
+DB_PATH=./database.sqlite
 FRONTEND_URL=https://your-project.vercel.app
 ```
 
@@ -237,13 +253,16 @@ UPLOAD_DIR=./uploads
 
 ### Backend Issues
 
-#### Database resets on deployment
+#### Database resets frequently
 
-**Problem**: Data disappears after redeploying.
+**Problem**: Data disappears after redeploying or when service restarts.
 
-**Solution**: Verify persistent disk is configured:
-- Mount Path: `/var/data`
-- DB_PATH: `/var/data/database.sqlite`
+**Solution**: This is expected behavior on Render's free tier. The database will reset:
+- After every deployment
+- When the service spins down and restarts
+- During Render maintenance
+
+**Workaround**: Re-register test accounts before each demo/presentation.
 
 #### "Cannot find module" errors
 
@@ -277,9 +296,9 @@ UPLOAD_DIR=./uploads
 **Problem**: Permission errors.
 
 **Solutions**:
-1. Verify persistent disk is mounted
-2. Check `DB_PATH` points to `/var/data/database.sqlite`
-3. Review Render logs for permission errors
+1. Check `DB_PATH` is set to `./database.sqlite`
+2. Review Render logs for permission errors
+3. Verify database initialization completed successfully
 
 ---
 
@@ -325,7 +344,7 @@ UPLOAD_DIR=./uploads
 - [ ] Never commit `.env` files to GitHub
 - [ ] `FRONTEND_URL` is set correctly to prevent CORS issues
 - [ ] Blockchain private keys (if used) are kept secure
-- [ ] Database has persistent disk configured
+- [ ] Understand that database will reset on free tier (plan accordingly)
 
 ---
 
@@ -371,9 +390,10 @@ After successful deployment:
    - Set up Render alerts
    - Monitor Vercel analytics
 
-3. **Database Backup**:
-   - Regularly backup your SQLite database from Render disk
-   - Consider migrating to PostgreSQL for production
+3. **Database Persistence** (Important for Production):
+   - Free tier database resets on restarts
+   - For production, migrate to PostgreSQL (Render) or MongoDB Atlas
+   - Both offer free tiers with persistent storage
 
 4. **SSL/HTTPS**:
    - Both Vercel and Render provide free SSL certificates
