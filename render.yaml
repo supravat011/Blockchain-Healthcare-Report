@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: healthchain-backend
+    runtime: node
+    region: oregon
+    plan: free
+    buildCommand: cd backend && npm install
+    startCommand: cd backend && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: JWT_SECRET
+        generateValue: true
+      - key: DB_PATH
+        value: /var/data/database.sqlite
+      - key: FRONTEND_URL
+        sync: false
+    disk:
+      name: healthchain-data
+      mountPath: /var/data
+      sizeGB: 1
+    healthCheckPath: /
